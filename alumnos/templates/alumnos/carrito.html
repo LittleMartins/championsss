@@ -1,0 +1,122 @@
+{% load static %}
+{% load custom_tags %}
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeStreet</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/css/bootstrap.min.css' %}">
+    <link rel="icon" href="{% static 'imgs/logonav2.ico' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-B2pZeK/PZuL1DfGtnT+j9I4v3i1RczR6P2T4UmrToOo+UB1h19h9zrqrKDE5Od5S5upcfO1HEdI0Zb45qZpwSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <p class="primero blink-text uppercase-text" style="margin-bottom: 0;">Envíos gratis por compras sobre $50.000</p>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black; margin-top: 0;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="{% static 'imgs/logonav2.png' %}" alt="Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'productos' %}">Productos</a> 
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Info
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'quienes_somos' %}">Quienes somos</a></li>
+                            <li><a class="dropdown-item" href="{% url 'envios' %}">Envios</a></li>
+                            <li><a class="dropdown-item" href="{% url 'devolucion' %}">Devolucion</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'carrito' %}">
+                            <img src="{% static 'imgs/bolsasuper.png' %}" alt="Carrito de compras" class="cart-icon">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Carrito de compras</h1>
+        <hr>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Item</th>
+                    <th scope="col">Talla</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Acción</th>
+                    <th scope="col">Total</th>
+                </tr>
+            </thead>
+            <tbody id="items">
+                {% for item in carrito %}
+                <tr>
+                    <th scope="row">{{ item.id }}</th>
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.talla }}</td>
+                    <td>{{ item.cantidad }}</td>
+                    <td>
+                        <button class="btn btn-info btn-sm" data-id="{{ item.id }}">
+                            +
+                        </button>
+                        <button class="btn btn-danger btn-sm" data-id="{{ item.id }}">
+                            -
+                        </button>
+                    </td>
+                    <td>$ <span>{{ item.cantidad|multiply:item.precio }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr id="footer">
+                    <th scope="row" colspan="3">Total productos</th>
+                    <td>{{ total_cantidad }}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" id="vaciar-carrito">
+                            Vaciar todo
+                        </button>
+                        <a href="{% url 'pago' %}" class="btn btn-primary btn-sm">
+                            Ir a pagar
+                        </a>
+                    </td>
+                    <td class="font-weight-bold">$ <span>{{ total_precio }}</span></td>
+                </tr>
+            </tfoot>
+        </table>
+        <div class="row" id="cards">
+            {% for producto in productos %}
+            <div class="col-12 mb-2 col-md-4">
+                <div class="card">
+                    <img src="{{ producto.thumbnailUrl }}" alt="" class="card-img-top">
+                    <div class="card-body">
+                        <h5>{{ producto.title }}</h5>
+                        <p class="card-text">$ <span>{{ producto.precio }}</span></p>
+                        <button class="btn btn-dark">Comprar</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script src="{% static 'java/app.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>
